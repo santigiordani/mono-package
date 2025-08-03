@@ -1,0 +1,132 @@
+% Paquete del mono
+
+% Hago este paquete principalmente para tener entornos de definiciones, lemas, teoremas, corolarios, etc indentados.
+% Para documentos sencillos puede que sean demasiadas cosas que importar, en un futuro podríamos agregar una opción "ligera".
+
+% Declaracion
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{mono-package}[2025/8/3]
+
+% Importamos paquetes requeridos
+\RequirePackage[utf8]{inputenc}                             % Codificacion
+\RequirePackage[spanish, es-tabla, es-nodecimaldot]{babel}  % Idioma
+\RequirePackage{amsmath}                                    % Simbolos
+\RequirePackage{amsthm}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{bm}                                         % Símbolos en negrita con el comando \bm
+\RequirePackage[margin = 1.0in]{geometry}                   % Margenes
+\RequirePackage{changepage}                                 % Cambios locales en los margenes
+\RequirePackage{sectsty}                                    % Centrar secciones
+\RequirePackage{graphicx}                                   % Graficos
+\RequirePackage{subcaption}                                 % Subgraficos
+\RequirePackage[all]{xy}                                    % Diagramas de flechas
+\RequirePackage{hyperref}                                   % Links
+\RequirePackage{verbatim}                                   % Comentarios con \begin{comment}
+\RequirePackage{xcolor}                                     % Texto de colores
+
+% Configuramos el punto decimal
+\spanishdecimal{.}
+
+% Comandos para letras con doble barra
+\newcommand{\N}{\mathbb{N}}                                 % Naturales
+\newcommand{\Z}{\mathbb{Z}}                                 % Enteros
+\newcommand{\Q}{\mathbb{Q}}                                 % Racionales
+\newcommand{\I}{\mathbb{I}}                                 % Irracionales
+\newcommand{\R}{\mathbb{R}}                                 % Reales
+\newcommand{\C}{\mathbb{C}}                                 % Complejos
+\newcommand{\K}{\mathbb{K}}                                 % Cuerpo arbitrario
+\newcommand{\E}{\mathbb{E}}                                 % Esperanza
+
+% Comandos para letras caligráficas
+\newcommand{\A}{\mathcal{A}}                                % Sigma algebra
+\newcommand{\B}{\mathcal{B}}                                % Borel sigma-algebra, base
+\newcommand{\T}{\mathcal{T}}                                % Topologia
+
+% Comandos útiles de operadores y conjuntos
+\newcommand{\yy}{\qquad \text{ y } \qquad}                  % "y" entre expresiones
+\newcommand{\ee}{\qquad \text{ e } \qquad}                  % "e" entre expresiones
+\newcommand{\oo}{\qquad \text{ ó } \qquad}                  % "o" entre expresiones
+\newcommand{\yyy}{\qquad \qquad \text{ y } \qquad \qquad}   % "y" entre expresiones
+\newcommand{\eee}{\qquad \qquad \text{ e } \qquad \qquad}   % "e" entre expresiones
+\newcommand{\ooo}{\qquad \qquad \text{ ó } \qquad \qquad}   % "o" entre expresiones
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert}            % Norma
+\newcommand{\comentario}[1]{\textcolor{blue}{#1}}
+
+
+% Redefinimos el entorno de demostración de amsmath para que este indentado
+\makeatletter
+\renewenvironment{proof}[1][\proofname]{\par
+  \pushQED{\qed}%
+  \normalfont \topsep6\p@\@plus6\p@\relax
+  \list{}{%
+    \leftmargin = \parindent%
+    \setlength{\labelwidth}{0pt}%
+    \setlength{\itemindent}{-6pt}%
+  }%
+  \item\hskip\labelsep{\itshape#1\@addpunct{.}} \ignorespaces
+}{%
+  \popQED\endlist\@endpefalse
+}
+\makeatother
+
+% Definimos un nuevo theoremstyle (un objeto de amsmath) con titulos en negrita e indentados
+\newtheoremstyle{indenteddefinition}
+  {} % Space above
+  {} % Space below
+  {\hangindent=\parindent} % Body font
+  {\parindent} % Indent amount (empty for no indent, you can set it to 3mm)
+  {\bfseries} % Theorem head font
+  {} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, or customize as needed)
+
+% Definimos un nuevo theoremstyle (un objeto de amsmath) con titulos en cursiva e indentados
+\newtheoremstyle{indentedremark}
+  {} % Space above
+  {} % Space below
+  {\hangindent=\parindent} % Body font
+  {\parindent} % Indent amount (empty for no indent, you can set it to 3mm)
+  {\itshape} % Theorem head font
+  {:} % Punctuation after theorem head
+  {.5em} % Space after theorem head
+  {} % Theorem head spec (can be left empty, or customize as needed)
+
+% Definimos los nuevos entornos
+\theoremstyle{indenteddefinition}
+\newtheorem{lema}{Lema}[section]
+\newtheorem{definicion}[lema]{Definición}
+\newtheorem{proposicion}[lema]{Proposición}
+\newtheorem{teorema}[lema]{Teorema}
+\newtheorem{corolario}[lema]{Corolario}
+\newtheorem{ejemplo}[lema]{Ejemplo}
+\newtheorem{ejercicio}[lema]{Ejercicio}
+
+\theoremstyle{indentedremark}
+\newtheorem*{observacion}{Observación}
+
+\renewcommand{\proofname}{Demostración}
+\newenvironment{demostracion}{\begin{proof}}{\end{proof}}
+
+
+% Encabezado de Tomas (que se robó de la UBA)
+\newcommand{\encabezado}[3]{
+    {\noindent \scriptsize \sc #1 \hfill #2}
+    \begin{center}
+        \large \sc #3
+    \end{center}
+}
+
+% Título entre lineas de Tomas (que también se robó de la UBA)
+\newcommand{\linea}[1]{
+    \bigskip                                                % Dejamos espacio
+    \hrule                                                  % Hacemos una linea
+    \begin{center}
+        \bf \large #1
+    \end{center}
+    \hrule                                                  % Hacemos una linea
+    \bigskip                                                % Dejamos espacio
+}  
+
+% Centrar títulos de secciones y cambiarles la letra a todo mayúsculas:
+% \allsectionsfont{\centering \sc}
